@@ -322,6 +322,7 @@ class BetterPlayerController {
             BetterPlayerSubtitlesSource(
               type: BetterPlayerSubtitlesSourceType.network,
               name: asmsSubtitle.name,
+              language: asmsSubtitle.language,
               urls: asmsSubtitle.realUrls,
               asmsIsSegmented: asmsSubtitle.isSegmented,
               asmsSegmentsTime: asmsSubtitle.segmentsTime,
@@ -337,7 +338,15 @@ class BetterPlayerController {
           _isDataSourceAsms(betterPlayerDataSource!)) {
         _betterPlayerAsmsAudioTracks = _response.audios ?? [];
         if (_betterPlayerAsmsAudioTracks?.isNotEmpty == true) {
-          setAudioTrack(_betterPlayerAsmsAudioTracks!.first);
+          var defaultAudio = _betterPlayerAsmsAudioTracks!.first;
+          defaultAudio = _betterPlayerAsmsAudioTracks!.reduce(
+            (current, next) => (current.format!.selectionFlags ?? 0) >
+                    (next.format!.selectionFlags ?? 0)
+                ? current
+                : next,
+          );
+
+          setAudioTrack(defaultAudio);
         }
       }
     }

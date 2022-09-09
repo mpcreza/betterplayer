@@ -1,3 +1,5 @@
+import 'package:better_player/src/hls/hls_parser/format.dart';
+
 ///Representation of HLS / DASH audio track
 class BetterPlayerAsmsAudioTrack {
   ///Audio index in DASH xml or Id of track inside HLS playlist
@@ -18,11 +20,16 @@ class BetterPlayerAsmsAudioTrack {
   ///mimeType of the audio track
   final String? mimeType;
 
-  BetterPlayerAsmsAudioTrack(
-      {this.id,
-      this.segmentAlignment,
-      this.label,
-      this.language,
-      this.url,
-      this.mimeType});
+  /// Format information associated with this rendition.
+  final Format? format;
+
+  BetterPlayerAsmsAudioTrack({
+    this.id,
+    this.segmentAlignment,
+    this.label,
+    this.language,
+    this.url,
+    this.mimeType,
+    this.format,
+  });
 }

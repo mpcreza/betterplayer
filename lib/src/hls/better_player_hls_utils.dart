@@ -174,6 +174,7 @@ class BetterPlayerHlsUtils {
           label: audio.name,
           language: audio.format.language,
           url: audio.url.toString(),
+          format: audio.format,
         ));
       }
     }
