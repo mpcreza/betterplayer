@@ -6,6 +6,7 @@
 import 'dart:async';
 
 // Flutter imports:
+import 'package:better_player/src/asms/better_player_asms_audio_track.dart';
 import 'package:better_player/src/configuration/better_player_buffering_configuration.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -157,6 +158,10 @@ abstract class VideoPlayerPlatform {
 
   Future<void> setAudioTrack(int? textureId, String? name, int? index) {
     throw UnimplementedError('setAudio() has not been implemented.');
+  }
+
+  Future<List<BetterPlayerAsmsAudioTrack>?> getAudioTracks(int? textureId) {
+    throw UnimplementedError('getAudioTracks() has not been implemented.');
   }
 
   Future<void> setMixWithOthers(int? textureId, bool mixWithOthers) {

@@ -32,4 +32,9 @@ class BetterPlayerAsmsAudioTrack {
     this.mimeType,
     this.format,
   });
+
+  @override
+  String toString() {
+    return 'id: $id, label: $label, language: $language';
+  }
 }

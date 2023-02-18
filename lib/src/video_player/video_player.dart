@@ -5,6 +5,7 @@
 // Dart imports:
 import 'dart:async';
 import 'dart:io';
+import 'package:better_player/src/asms/better_player_asms_audio_track.dart';
 import 'package:better_player/src/configuration/better_player_buffering_configuration.dart';
 import 'package:better_player/src/video_player/video_player_platform_interface.dart';
 import 'package:flutter/material.dart';
@@ -619,6 +620,10 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
 
   void setAudioTrack(String? name, int? index) {
     _videoPlayerPlatform.setAudioTrack(_textureId, name, index);
+  }
+
+  Future<List<BetterPlayerAsmsAudioTrack>?> getAudioTracks() {
+    return _videoPlayerPlatform.getAudioTracks(_textureId);
   }
 
   void setMixWithOthers(bool mixWithOthers) {

@@ -1212,6 +1212,14 @@ class BetterPlayerController {
     videoPlayerController!.setAudioTrack(audioTrack.label, audioTrack.id);
   }
 
+  Future<List<BetterPlayerAsmsAudioTrack>?> getAudioTracks() async {
+    if (videoPlayerController == null) {
+      throw StateError("The data source has not been initialized");
+    }
+
+    return videoPlayerController!.getAudioTracks();
+  }
+
   ///Enable or disable audio mixing with other sound within device.
   void setMixWithOthers(bool mixWithOthers) {
     if (videoPlayerController == null) {

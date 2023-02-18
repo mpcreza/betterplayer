@@ -2,6 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'dart:async';
+import 'dart:collection';
+import 'dart:convert';
+import 'package:better_player/src/asms/better_player_asms_audio_track.dart';
 import 'package:better_player/src/configuration/better_player_buffering_configuration.dart';
 import 'package:better_player/src/core/better_player_utils.dart';
 import 'package:flutter/foundation.dart';
@@ -267,6 +270,23 @@ class MethodChannelVideoPlayer extends VideoPlayerPlatform {
         'index': index,
       },
     );
+  }
+
+  @override
+  Future<List<BetterPlayerAsmsAudioTrack>?> getAudioTracks(int? textureId) async {
+    final res = await _channel.invokeListMethod<Map<String, dynamic>>(
+      'getAudioTracks',
+      <String, dynamic>{
+        'textureId': textureId,
+      },
+    );
+
+    final data = res?.cast<dynamic>().map((e) => BetterPlayerAsmsAudioTrack(
+      id: e['id'] as int?,
+      label: e['label'] as String? ?? 'unknown',
+      language: e['language'] as String? ?? 'unknown',
+    )).toList();
+    return data;
   }
 
   @override

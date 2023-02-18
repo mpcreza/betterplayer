@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -32,7 +31,6 @@ import com.google.android.exoplayer2.drm.FrameworkMediaDrm
 import com.google.android.exoplayer2.drm.UnsupportedDrmException
 import com.google.android.exoplayer2.drm.DummyExoMediaDrm
 import com.google.android.exoplayer2.drm.LocalMediaDrmCallback
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.ClippingMediaSource
 import com.google.android.exoplayer2.ui.PlayerNotificationManager.MediaDescriptionAdapter
@@ -51,13 +49,12 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import io.flutter.plugin.common.EventChannel.EventSink
-import androidx.media.session.MediaButtonReceiver
 import androidx.work.Data
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.drm.DrmSessionManagerProvider
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.SelectionOverride
+import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.TrackSelectionOverrides
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSource
@@ -719,6 +716,42 @@ internal class BetterPlayer(
 
             trackSelector.setParameters(builder)
         }
+    }
+
+    fun getAudioTracks(): List<HashMap<String, Any?>> {
+        val audioTracks: MutableList<HashMap<String, Any?>> = mutableListOf()
+
+        try {
+            val mappedTrackInfo = trackSelector.currentMappedTrackInfo
+            if (mappedTrackInfo != null) {
+                for (rendererIndex in 0 until mappedTrackInfo.rendererCount) {
+                    if (mappedTrackInfo.getRendererType(rendererIndex) != C.TRACK_TYPE_AUDIO) {
+                        continue
+                    }
+
+                    val trackGroupArray = mappedTrackInfo.getTrackGroups(rendererIndex)
+                    for (groupIndex in 0 until trackGroupArray.length) {
+                        val group = trackGroupArray[groupIndex]
+                        for (groupElementIndex in 0 until group.length) {
+                            val format = group.getFormat(groupElementIndex)
+                            audioTracks.add(
+                                hashMapOf(
+                                    "id" to groupIndex,
+                                    "label" to format.label,
+                                    "language" to format.language,
+                                )
+                            )
+                        }
+                    }
+                    return audioTracks;
+                }
+            }
+        } catch (exception: Exception) {
+            Log.e(TAG, "getAudioTracks failed$exception")
+            return audioTracks
+        }
+
+        return audioTracks
     }
 
     private fun sendSeekToEvent(positionMs: Long) {

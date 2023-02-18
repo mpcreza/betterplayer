@@ -24,6 +24,8 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.view.TextureRegistry
+import org.json.JSONArray
+import org.json.JSONObject
 import java.lang.Exception
 import java.util.HashMap
 
@@ -207,6 +209,10 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                     player.setAudioTrack(name, index)
                 }
                 result.success(null)
+            }
+            GET_AUDIO_TRACKS_METHOD -> {
+                val trackGroupArray = player.getAudioTracks()
+                result.success(trackGroupArray)
             }
             SET_MIX_WITH_OTHERS_METHOD -> {
                 val mixWitOthers = call.argument<Boolean?>(
@@ -537,6 +543,7 @@ class BetterPlayerPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         private const val SET_SPEED_METHOD = "setSpeed"
         private const val SET_TRACK_PARAMETERS_METHOD = "setTrackParameters"
         private const val SET_AUDIO_TRACK_METHOD = "setAudioTrack"
+        private const val GET_AUDIO_TRACKS_METHOD = "getAudioTracks"
         private const val ENABLE_PICTURE_IN_PICTURE_METHOD = "enablePictureInPicture"
         private const val DISABLE_PICTURE_IN_PICTURE_METHOD = "disablePictureInPicture"
         private const val IS_PICTURE_IN_PICTURE_SUPPORTED_METHOD = "isPictureInPictureSupported"
