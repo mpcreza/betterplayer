@@ -273,6 +273,19 @@ class BetterPlayerController {
     ///Process data source
     await _setupDataSource(betterPlayerDataSource);
     setTrack(BetterPlayerAsmsTrack.defaultTrack());
+
+    if (betterPlayerDataSource.type == BetterPlayerDataSourceType.file) {
+      _setupAudioTracks();
+    }
+  }
+
+  Future<void> _setupAudioTracks() async {
+    final audioTracks = await getAudioTracks();
+    _betterPlayerAsmsAudioTracks = audioTracks;
+    if (audioTracks != null && audioTracks.isNotEmpty) {
+      final defaultAudio = audioTracks[0];
+      _betterPlayerAsmsAudioTrack = defaultAudio;
+    }
   }
 
   ///Configure subtitles based on subtitles source.
