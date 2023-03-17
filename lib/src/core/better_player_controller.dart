@@ -633,9 +633,7 @@ class BetterPlayerController {
   ///Start video playback. Play will be triggered only if current lifecycle state
   ///is resumed.
   Future<void> play() async {
-    if (videoPlayerController == null) {
-      throw StateError("The data source has not been initialized");
-    }
+    if (videoPlayerController == null) return;
 
     if (_appLifecycleState == AppLifecycleState.resumed) {
       await videoPlayerController!.play();
@@ -657,9 +655,7 @@ class BetterPlayerController {
 
   ///Stop video playback.
   Future<void> pause() async {
-    if (videoPlayerController == null) {
-      throw StateError("The data source has not been initialized");
-    }
+    if (videoPlayerController == null) return;
 
     await videoPlayerController!.pause();
     _postEvent(BetterPlayerEvent(BetterPlayerEventType.pause));
@@ -730,9 +726,8 @@ class BetterPlayerController {
 
   ///Flag which determines whenever player is playing or not.
   bool? isPlaying() {
-    if (videoPlayerController == null) {
-      throw StateError("The data source has not been initialized");
-    }
+    if (videoPlayerController == null) return false;
+
     return videoPlayerController!.value.isPlaying;
   }
 
