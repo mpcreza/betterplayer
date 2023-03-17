@@ -269,7 +269,9 @@ class _BetterPlayerVideoFitWidgetState
 
         if (_initialized != controller!.value.initialized) {
           _initialized = controller!.value.initialized;
-          setState(() {});
+          try {
+            setState(() {});
+          } catch (_) {}
         }
       };
       controller!.addListener(_initializedListener!);
