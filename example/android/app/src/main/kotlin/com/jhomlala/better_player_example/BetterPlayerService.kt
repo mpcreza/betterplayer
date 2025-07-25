@@ -8,6 +8,7 @@ import android.os.IBinder
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
 
 class BetterPlayerService : Service() {
 
@@ -47,7 +48,17 @@ class BetterPlayerService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationBuilder.setCategory(Notification.CATEGORY_SERVICE);
         }
-        startForeground(foregroundNotificationId, notificationBuilder.build())
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(
+                foregroundNotificationId,
+                notificationBuilder.build(),
+                FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+            )
+        } else {
+            startForeground(foregroundNotificationId, notificationBuilder.build())
+        }
+
         return START_NOT_STICKY
     }
 
